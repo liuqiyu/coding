@@ -8,7 +8,49 @@
 </head>
 
 <body>
+  <script>
+    var data = {
+      name: 'yuyu',
+      age: 12,
+      other: {
+        a: 1,
+        b: 2
+      }
+    }
 
+    observe(data)
+
+    function observe(data) {
+      if (!data || typeof data !== 'object') {
+        return
+      }
+
+      Object.keys(data).forEach(item => {
+        console.log(data[item])
+        deep(data, item, data[item])
+      })
+    }
+
+    function deep(data, item, value) {
+      observe(value)
+
+      Object.defineProperty(data, item, {
+        enumerable: true, // 可枚举
+        configurable: false, // 不能再define
+        get() {
+          return value
+        },
+        set(newVal) {
+          console.log(newVal)
+          value = newVal
+        }
+      })
+    }
+    data.name = 333
+    data.age = 333
+    data.other.a = 33
+    console.log(data)
+  </script>
 </body>
 
 </html>
